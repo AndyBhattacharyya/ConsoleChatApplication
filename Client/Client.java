@@ -23,7 +23,6 @@ public class Client {
         //Client Chat Application
         Socket sock = new Socket("localhost",25565);
         //Console Streams
-        BufferedReader console_in;
         PrintWriter console_out;
         //Sock Streams
         BufferedReader sock_recv = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -34,12 +33,15 @@ public class Client {
         //Messaging
         String message_send="";
         String message_recv="";
+        //Console Streams
+        BufferedReader console_in = new BufferedReader(new InputStreamReader(System.in));
+
         //Boolean to keep thread blocked
         boolean done_chat=false;
         while(!done_chat) {
             while (!message_recv.equalsIgnoreCase("stop")) {
                 //Sending Message First
-                message_send= buildMessage(username, new BufferedReader(new InputStreamReader(System.in)));
+                message_send= buildMessage(username, console_in);
                 sock_send.println(message_send);
                 //Recieving Message Later
                 message_recv = sock_recv.readLine();

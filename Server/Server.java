@@ -31,19 +31,21 @@ public class Server {
             sock_send.println("Connection Initiated To 8080");
             System.out.println(sock_recv.readLine());
             //Console Streams
-            BufferedReader console_in;
             PrintWriter console_out;
             //Messaging
             String message_send="";
             String message_recv="";
+            //Setting up reference to standard input
+            BufferedReader console_in= new BufferedReader(new InputStreamReader(System.in));
+
+
             //Listen then Send
             while(!message_recv.equalsIgnoreCase("stop")){
                 //Recieving Message First
                 message_recv = sock_recv.readLine();
                 System.out.println(message_recv);
                 //Sending Message Last
-                message_send= buildMessage(username, new BufferedReader(new InputStreamReader(System.in)));
-                sock_send.println(message_send);
+                message_send= buildMessage(username, console_in);
                 sock_send.println(message_send);
             }
             done_processing=true;
