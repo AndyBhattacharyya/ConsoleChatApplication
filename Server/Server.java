@@ -11,44 +11,19 @@ public class Server {
         System.out.print("Enter your username: ");
         return inp.nextLine();
     }
-    private static String buildMessage(String username, BufferedReader console_in) throws Exception{
-        LocalTime myObj = LocalTime.now();
-        String time = myObj.toString();
-        time = time.substring(0,5);
-        return "["+time+"~"+username+"] "+console_in.readLine();
-    }
     public static void main(String[] args) throws Exception {
         //Server Side Application. Receive then Send Model
         String username = setUsername();
         ServerSocket listener = new ServerSocket(25565);
+        BufferedReader console_in= new BufferedReader(new InputStreamReader(System.in));
         boolean done_processing = false;
-        while(!done_processing){
-            Socket sock = listener.accept();
-            //Sock Streams
-            BufferedReader sock_recv = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-            PrintWriter sock_send = new PrintWriter(sock.getOutputStream(),true);
-            //Confirming Connection
-            sock_send.println("Connection Initiated To 8080");
-            System.out.println(sock_recv.readLine());
-            //Console Streams
-            PrintWriter console_out;
-            //Messaging
-            String message_send="";
-            String message_recv="";
-            //Setting up reference to standard input
-            BufferedReader console_in= new BufferedReader(new InputStreamReader(System.in));
+        Socket sock = listener.accept();
+        //Setting up reference to standard input
+        //Listen and Sending Threads
+        Thread output = new Thread(new Communication.OutputScreen(sock));
+        output.start();
+        Thread send = new Thread(new Communication.SendMessage(sock,console_in,username));
+        send.start();
 
-
-            //Listen then Send
-            while(!message_recv.equalsIgnoreCase("stop")){
-                //Recieving Message First
-                message_recv = sock_recv.readLine();
-                System.out.println(message_recv);
-                //Sending Message Last
-                message_send= buildMessage(username, console_in);
-                sock_send.println(message_send);
-            }
-            done_processing=true;
-        }
     }
 }
