@@ -1,4 +1,6 @@
 package Server;
+import Communication.Communication;
+
 import java.io.*;
 import javax.net.*;
 import java.net.ServerSocket;
@@ -13,17 +15,8 @@ public class Server {
     }
     public static void main(String[] args) throws Exception {
         //Server Side Application. Receive then Send Model
-        String username = setUsername();
         ServerSocket listener = new ServerSocket(25565);
-        BufferedReader console_in= new BufferedReader(new InputStreamReader(System.in));
-        boolean done_processing = false;
-        Socket sock = listener.accept();
-        //Setting up reference to standard input
-        //Listen and Sending Threads
-        Thread output = new Thread(new Communication.OutputScreen(sock));
-        output.start();
-        Thread send = new Thread(new Communication.SendMessage(sock,console_in,username));
-        send.start();
-
+        Communication instance = new Communication(listener.accept());
+        instance.start();
     }
 }
