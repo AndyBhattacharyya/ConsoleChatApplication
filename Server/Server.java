@@ -1,22 +1,42 @@
 package Server;
-import Communication.Communication;
+import Communication.Client;
 
-import java.io.*;
-import javax.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-public class Server {
-    private static String setUsername(){
-        Scanner inp = new Scanner(System.in);
-        System.out.print("Enter your username: ");
-        return inp.nextLine();
+public class Server implements Runnable {
+
+    private List<ClientConnections> clients = new ArrayList<ClientConnections>();
+    public void addClient(ClientConnections client){
+        clients.add(client);
     }
-    public static void main(String[] args) throws Exception {
-        //Server Side Application. Receive then Send Model
-        ServerSocket listener = new ServerSocket(25565);
-        Communication instance = new Communication(listener.accept());
-        instance.start();
+    public boolean isClientsEmpty(){
+        return clients.isEmpty();
+    }
+
+    private void OUTPUT(String message){
+        for(ClientConnections client:clients){
+            client.client_output.println(message);
+        }
+    }
+    public void run(){
+        System.out.println("Thread Entered");
+        while(true){
+            try {
+                for (ClientConnections client: clients) {
+                    this.OUTPUT(client.client_input.readLine());
+                }
+            } catch(IOException e){
+                System.out.println("error");
+                    break;
+            }
+        }
+        System.out.println("Exiting Thread");
+
     }
 }
