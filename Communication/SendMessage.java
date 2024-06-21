@@ -13,6 +13,7 @@ public class SendMessage implements Runnable {
     private String message_send;
     private BufferedReader console_in;
     private String username;
+    private boolean ClientQuit;
 
 
     private String buildMessage(String username, BufferedReader console_in) throws IOException{
@@ -23,15 +24,24 @@ public class SendMessage implements Runnable {
         if(sock.isClosed()){
             throw new IOException();
         }
-        return message.equalsIgnoreCase("stop")?"stop":"["+time+"~"+username+"] "+message;
+        else{
+            if(message.equalsIgnoreCase("stop")){
+                ClientQuit = true;
+                message = username+" has left";
+                return message;
+            }
+            return "["+time+"~"+username+"] "+message;
+        }
     }
 
     public SendMessage(Socket sock_send, BufferedReader console_in, String username) throws Exception{
         this.sock=sock_send;
         this.sock_send =  new PrintWriter(sock_send.getOutputStream(),true);
-        this.message_send = "";
+        this.message_send = username+" has joined";
         this.console_in = console_in;
         this.username = username;
+        this.ClientQuit=false;
+        this.sock_send.println(message_send);
 
     }
     public void run()   {
@@ -40,7 +50,7 @@ public class SendMessage implements Runnable {
             try {
                 message_send=buildMessage(username,console_in);
                 sock_send.println(message_send);
-                if(message_send.equalsIgnoreCase("stop")){
+                if(ClientQuit){
                     donerunning = true;
                     sock.close();
                 }

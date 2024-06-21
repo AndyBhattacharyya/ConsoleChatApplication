@@ -21,14 +21,11 @@ public class OutputScreen implements Runnable{
                 //unpredictable since using buffer
                 //Testing
                 //if (!sock.isClosed()) {
-                    message_recv = sock_recv.readLine();
-                    if (message_recv.equalsIgnoreCase("stop")) {
-                        donerunning = true;
-                        sock.close();
-                        System.in.close();
-                    } else {
-                        System.out.println(message_recv);
-                    }
+                message_recv = sock_recv.readLine();
+                if(message_recv==null){
+                    throw new NullPointerException();
+                }
+                System.out.println(message_recv);
                 //}
 
             } catch(IOException e){
@@ -36,7 +33,9 @@ public class OutputScreen implements Runnable{
                 donerunning = true;
             }
             catch(NullPointerException e){
-                System.out.println("OutputScreen: NullPointerException");
+                //Server shuts down
+                System.out.println("OutputScreen: NullPointerException, message_rec: + "+message_recv);
+                try{System.in.close();}catch(IOException f){}
                 donerunning = true;
             }
         }

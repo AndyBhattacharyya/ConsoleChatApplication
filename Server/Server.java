@@ -1,14 +1,9 @@
 package Server;
-import Communication.Client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 public class Server implements Runnable {
 
     private volatile List<ClientConnections> clients = new ArrayList<ClientConnections>();
@@ -36,8 +31,7 @@ public class Server implements Runnable {
             try {
                 //System.out.println(clients.size());
                 for (ClientConnections client : clients) {
-                    System.out.println("for loop entered");
-                    Thread.sleep(1000);
+                    //System.out.println("for loop entered");
                     if (client.availInput()) {
                         //System.out.println("if statement entered");
                         OUTPUT(client.client_input.readLine());
