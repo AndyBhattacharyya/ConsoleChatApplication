@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 public class Server implements Runnable {
 
-    private List<ClientConnections> clients = new ArrayList<ClientConnections>();
+    private volatile List<ClientConnections> clients = new ArrayList<ClientConnections>();
 
     public void addClient(ClientConnections client) {
         clients.add(client);
@@ -36,14 +36,14 @@ public class Server implements Runnable {
             try {
                 //System.out.println(clients.size());
                 for (ClientConnections client : clients) {
-                    //System.out.println("for loop entered");
+                    System.out.println("for loop entered");
                     Thread.sleep(1000);
                     if (client.availInput()) {
                         //System.out.println("if statement entered");
                         OUTPUT(client.client_input.readLine());
                     }
                     //System.out.println("for loop exited");
-                }
+                    }
             } catch (InterruptedException e) {
                 System.out.println("Interrupted Execption");
                 break;
@@ -53,6 +53,7 @@ public class Server implements Runnable {
                System.out.println("availInput() error");
             }
             //System.out.println("Exiting Thread");
+            //try{Thread.sleep(20);}catch(Exception e){}
 
         }
     }
