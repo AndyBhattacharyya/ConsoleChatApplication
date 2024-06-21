@@ -44,9 +44,6 @@ public class SendMessage implements Runnable {
                     donerunning = true;
                     sock.close();
                 }
-                else {
-                    System.out.println(message_send);
-                }
             } catch(IOException e){
                 System.out.println("SendMessage: IOException");
                 donerunning = true;

@@ -12,31 +12,48 @@ import java.util.Scanner;
 public class Server implements Runnable {
 
     private List<ClientConnections> clients = new ArrayList<ClientConnections>();
-    public void addClient(ClientConnections client){
+
+    public void addClient(ClientConnections client) {
         clients.add(client);
     }
-    public boolean isClientsEmpty(){
+
+    public boolean isClientsEmpty() {
         return clients.isEmpty();
     }
 
-    private void OUTPUT(String message){
-        for(ClientConnections client:clients){
+    private void OUTPUT(String message) {
+        System.out.println("function entered " + message);
+        for (ClientConnections client : clients) {
+            System.out.println("OUTPUT: for loop entered");
             client.client_output.println(message);
+            System.out.println("Finish Sending");
         }
     }
-    public void run(){
-        System.out.println("Thread Entered");
-        while(true){
-            try {
-                for (ClientConnections client: clients) {
-                    this.OUTPUT(client.client_input.readLine());
-                }
-            } catch(IOException e){
-                System.out.println("error");
-                    break;
-            }
-        }
-        System.out.println("Exiting Thread");
 
+    public void run() {
+        System.out.println("Thread Entered");
+        while (true) {
+            try {
+                //System.out.println(clients.size());
+                for (ClientConnections client : clients) {
+                    //System.out.println("for loop entered");
+                    Thread.sleep(1000);
+                    if (client.availInput()) {
+                        //System.out.println("if statement entered");
+                        OUTPUT(client.client_input.readLine());
+                    }
+                    //System.out.println("for loop exited");
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted Execption");
+                break;
+            } catch (IOException e) {
+                System.out.println("IOException");
+            } catch (Exception e) {
+               System.out.println("availInput() error");
+            }
+            //System.out.println("Exiting Thread");
+
+        }
     }
 }

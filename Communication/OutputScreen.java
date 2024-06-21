@@ -37,6 +37,7 @@ public class OutputScreen implements Runnable{
             }
             catch(NullPointerException e){
                 System.out.println("OutputScreen: NullPointerException");
+                donerunning = true;
             }
         }
         System.out.println("Exiting Thread Output");

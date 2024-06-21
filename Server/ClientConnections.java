@@ -17,8 +17,11 @@ public class ClientConnections {
     public BufferedReader client_input;
     public ClientConnections(Socket client) throws Exception{
         this.client = client;
-        this.client_output = new PrintWriter(client.getOutputStream());
+        this.client_output = new PrintWriter(client.getOutputStream(), true);
         this.client_input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    }
+    public boolean availInput() throws Exception{
+       return client_input.ready();
     }
 
     private static ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -29,7 +32,7 @@ public class ClientConnections {
         ServerSocket listener = new ServerSocket(25565);
         do{
             if(server.isClientsEmpty()){
-                executor.submit(new Server());
+                executor.submit(server);
                 System.out.println("Server begins");
             }
             tmp=listener.accept();
