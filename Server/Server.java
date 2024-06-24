@@ -36,9 +36,9 @@ public class Server implements Runnable {
         else if(ActiveGame){
             try {
                 if (Integer.parseInt(content) == multiresult) {
-                    message = "[Server] " + message.substring(message.indexOf('~') + 1, message.indexOf("]")) + " Got it correct";
+                    message = "[Server] " + message.substring(message.indexOf('~') + 1, message.indexOf("]")) + " Got it correct: "+multiresult;
+                    ActiveGame = false;
                 }
-                ActiveGame = false;
             } catch (Exception e){}
         }
         for (ClientConnections client : clients) {

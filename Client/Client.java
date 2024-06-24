@@ -33,6 +33,6 @@ public class Client {
     }
     public static void main(String[] args) throws Exception{
         //Starting the application
-        new Client(new Socket("localhost",25565)).start();
+        new Client(new Socket("99.245.105.87",25565)).start();
     }
 }
