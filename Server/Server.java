@@ -6,9 +6,10 @@ import java.util.List;
 
 public class Server implements Runnable {
 
-    private volatile List<ClientConnections> clients = new ArrayList<ClientConnections>();
+    //Look into java.util.concurrent.atomic for synchronized access to this data structure/field updaters
+    private List<ClientConnections> clients = new ArrayList<ClientConnections>();
 
-    public void addClient(ClientConnections client) {
+    public synchronized void addClient(ClientConnections client) {
         clients.add(client);
     }
 
@@ -16,7 +17,7 @@ public class Server implements Runnable {
         return clients.isEmpty();
     }
 
-    private void OUTPUT(String message) {
+    private synchronized void OUTPUT(String message) {
         //System.out.println("function entered " + message);
         for (ClientConnections client : clients) {
             //System.out.println("OUTPUT: for loop entered");
