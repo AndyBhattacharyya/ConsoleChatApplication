@@ -17,16 +17,16 @@ public class Server implements Runnable {
     }
 
     private void OUTPUT(String message) {
-        System.out.println("function entered " + message);
+        //System.out.println("function entered " + message);
         for (ClientConnections client : clients) {
-            System.out.println("OUTPUT: for loop entered");
+            //System.out.println("OUTPUT: for loop entered");
             client.client_output.println(message);
-            System.out.println("Finish Sending");
+            //System.out.println("Finish Sending");
         }
     }
 
     public void run() {
-        System.out.println("Thread Entered");
+        //System.out.println("Thread Entered");
         while (true) {
             try {
                 //System.out.println(clients.size());
